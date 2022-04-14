@@ -37,7 +37,7 @@ public class B1260 {
         bfs();
     }
 
-    // 깊이 우선탐색(dfs)
+    // 깊이 우선탐색(DFS)
     public static void dfs(int currentDot) {
         check[currentDot] = true;
         System.out.print(currentDot + " ");
