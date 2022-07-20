@@ -17,4 +17,5 @@ public class B11726 {
         }
         System.out.println(dp[n]);
     }
+    
 }
