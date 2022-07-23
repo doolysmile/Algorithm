@@ -45,5 +45,5 @@ public class B2156 {
 
             return dp[N];
         }
-    
+
 }
