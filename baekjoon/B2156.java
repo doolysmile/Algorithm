@@ -6,44 +6,38 @@ import java.io.InputStreamReader;
 import java.util.Scanner;
 
 public class B2156 {
-
-        static Integer[] dp;
-        static int[] arr;
-
-        public static void main(String[] args) {
-
-            Scanner in = new Scanner(System.in);
-
-            int N = in.nextInt();
-
-            dp = new Integer[N + 1];
-            arr = new int[N + 1];
-
-            for(int i = 1; i < N + 1; i++) {
-                arr[i] = in.nextInt();
-            }
-
-            dp[0] = 0;
-            dp[1] = arr[1];
-
-            /*
-             *  (N이 1로 주어질 수 있으므로 이럴 때를 위해 조건식을 달아둔다.
-             *  또한 dp[2]는 어떤 경우에도 첫 번째와 두 번째를 합한 것이 최댓값이다.
-             */
-            if(N > 1) {
-                dp[2] = arr[1] + arr[2];
-            }
-
-            System.out.println(recur(N));
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int N = Integer.parseInt(br.readLine());
+        int[] wine = new int[N];
+        int[][] dp = new int[N][2];
+        for(int i = 0; i < N; i++){
+            wine[i] = Integer.parseInt(br.readLine());
         }
-
-        static int recur(int N) {
-
-            if(dp[N] == null) {
-                dp[N] = Math.max(Math.max(recur(N - 2), recur(N - 3) + arr[N - 1]) + arr[N], recur(N - 1));
+        dp[0][0] = wine[0];
+        dp[0][1] = 0;
+        for(int i = 1; i < N; i++){
+            if(i == 1){
+                dp[i][0] = dp[i - 1][0] + wine[i];
+                dp[i][1] = wine[i - 1];
             }
+            else if( i == 2){
+                dp[i][0] = Math.max(dp[i-2][0] + wine[i], dp[i-2][1] + wine[i] + wine[i-1]);
+                dp[i][1] = dp[i-1][0];
+            }
+            else{
+                // oxoo, xo, xxoo
+                dp[i][0] = Math.max(Math.max(dp[i-2][1] + wine[i-1] + wine[i], dp[i-1][1] + wine[i]), dp[i-3][1] + wine[i -1] + wine[i]);
+                // xoox, oxox, oxx
+                dp[i][1] = Math.max(Math.max(dp[i-3][1] + wine[i-2] + wine[i-1], dp[i-2][1] + wine[i-1]), dp[i-2][0]);
 
-            return dp[N];
+            }
         }
+        System.out.println(Math.max(dp[N-1][0], dp[N-1][1]));
+//        for(int i = 0; i < N; i++){
+//            System.out.println(i + " " +  dp[i][0] + " " + dp[i][1]);
+//        }
+    }
+
 
 }
