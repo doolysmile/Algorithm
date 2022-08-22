@@ -23,7 +23,7 @@ public class B1600 {
         int[] horseX = {-1, 1, -2, 2, -2, 2, -1, 1};
         int[] horseY = {-2, -2, -1, -1, 1, 1, 2, 2};
         int ans = -1;
-        boolean[][][] visited = new boolean[H][W][2];
+        boolean[][][] visited = new boolean[H][W][K + 1];
         for(int i = 0 ; i < H; i++){
             st = new StringTokenizer(br.readLine());
             for(int j = 0; j < W; j++){
@@ -40,8 +40,8 @@ public class B1600 {
             }
             for(int i = 0; i < 4; i++){
                 if(0 <= tmp.x + x[i] && tmp.x + x[i] < H && 0 <= tmp.y + y[i] && tmp.y + y[i] < W){
-                    if(map[tmp.x + x[i]][tmp.y + y[i]] == 0 && visited[tmp.x + x[i]][tmp.y + y[i]][0] == false){
-                        visited[tmp.x + x[i]][tmp.y + y[i]][0] = true;
+                    if(map[tmp.x + x[i]][tmp.y + y[i]] == 0 && visited[tmp.x + x[i]][tmp.y + y[i]][tmp.cntHorse] == false){
+                        visited[tmp.x + x[i]][tmp.y + y[i]][tmp.cntHorse] = true;
                         q.add(new Location(tmp.x + x[i], tmp.y + y[i], tmp.cntHorse, tmp.cnt + 1));
                     }
                 }
@@ -49,8 +49,8 @@ public class B1600 {
             if(tmp.cntHorse < K){
                 for(int i = 0; i < 8; i++){
                     if(0 <= tmp.x + horseX[i] && tmp.x + horseX[i] < H && 0 <= tmp.y + horseY[i] && tmp.y + horseY[i] < W){
-                            if(map[tmp.x + horseX[i]][tmp.y + horseY[i]] == 0 && visited[tmp.x + horseX[i]][tmp.y + horseY[i]][1] == false){
-                                visited[tmp.x + horseX[i]][tmp.y + horseY[i]][1] = true;
+                            if(map[tmp.x + horseX[i]][tmp.y + horseY[i]] == 0 && visited[tmp.x + horseX[i]][tmp.y + horseY[i]][tmp.cntHorse + 1] == false){
+                                visited[tmp.x + horseX[i]][tmp.y + horseY[i]][tmp.cntHorse + 1] = true;
                                 q.add(new Location(tmp.x + horseX[i], tmp.y + horseY[i], tmp.cntHorse + 1, tmp.cnt + 1));
                             }
                         }
