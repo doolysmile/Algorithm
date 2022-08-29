@@ -30,9 +30,12 @@ public class B21278 {
             map[x][y] = 1;
             map[y][x] = 1;
         }
+        // 위의 코드 까지가 입력
         makeCity();
         System.out.println(first + " " + second + " " + ans);
     }
+    
+    //치킨 집을 짓는 조합을 구하는 부분
     static void makeCity(){
         for(int i = 1; i < N ; i++){
             for(int j = i + 1; j <= N; j++){
@@ -40,13 +43,12 @@ public class B21278 {
             }
         }
     }
+    // 거리를 계산 하는 부분
     static void cal(int x, int y){
         boolean[] visited = new boolean[N + 1];
         visited[x] = true;
         visited[y] = true;
-        int cnt = 2;
         int tmpAns = 0;
-        int sum = 2;
         Queue<Node> q = new LinkedList<>();
         q.add(new Node(x, 0));
         q.add(new Node(y, 0));
@@ -67,7 +69,7 @@ public class B21278 {
         }
 
     }
-
+    // q에 넣기 위해 사용한 자료 구조, 점의 위치와 거리를 넣어줌
     static class Node{
         int dot;
         int dis;
