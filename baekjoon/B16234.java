@@ -44,6 +44,7 @@ public class B16234 {
                 map[i][j] = Integer.parseInt(st.nextToken());
             }
         }
+        // ====위에 까지 입력====
         while(true){
 
             visited = new boolean[N][N];
@@ -80,9 +81,9 @@ public class B16234 {
     static void makeUnion(int x, int y){
 
         union = new ArrayList<>();
-        // 수정 생각
-        int[] moveX = {1, 0};
-        int[] moveY = {0, 1};
+
+        int[] moveX = {1, 0, -1, 0};
+        int[] moveY = {0, 1, 0, -1};
         Queue<Node> q = new LinkedList<>();
         union.add(new Node(x,y));
         q.add(new Node(x,y));
@@ -91,7 +92,7 @@ public class B16234 {
         while(!q.isEmpty()){
             Node node = q.poll();
             // 수정 생각
-            for(int i = 0; i < 4; i++){
+            for(int i = 0; i < 4; i++){ // 4방향 탐색
                 int nextX = node.x + moveX[i];
                 int nextY = node.y + moveY[i];
                 if(0 <= nextX && nextX < N && 0 <= nextY && nextY < N){
@@ -99,8 +100,8 @@ public class B16234 {
                         continue;
                     }
                     int diff = Math.abs(map[nextX][nextY] - map[node.x][node.y]);
-                    if(L <= diff && diff <= R){
-                        q.add(new Node(nextX, nextY));
+                    if(L <= diff && diff <= R){     // 연합을 만드는 조건
+                        q.add(new Node(nextX, nextY));  // 연합이면 추가
                         union.add(new Node(nextX, nextY));
                         visited[nextX][nextY] = true;
                         sum += map[nextX][nextY];
