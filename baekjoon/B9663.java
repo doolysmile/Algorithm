@@ -9,12 +9,12 @@ public class B9663 {
     static int N;
     static int cnt;
 
-    static ArrayList<Integer> chess;
+    static int[] chess;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         N = Integer.parseInt(br.readLine());
         cnt = 0;
-        chess = new ArrayList<Integer>();
+        chess = new int[N];
         dfs(0);
 
         System.out.print(cnt);
@@ -25,21 +25,18 @@ public class B9663 {
             return;
         }
         for(int i = depth * N; i < N *(depth + 1); i++){
-            if(check(i)){
-                chess.add(i);
+            if(check(i, depth)){
+                chess[depth] = i;
                 dfs(depth + 1);
-                chess.remove((Object) i);
             }
         }
     }
-    static boolean check(int current){
-        int x = current / N;
+    static boolean check(int current, int depth){
         int y = current % N;
-        for(int k = 0; k < chess.size(); k++){
-            int temp = chess.get(k);
-            int i = temp / N;
-            int j = temp % N;
-            if(i == x || j == y || Math.abs(x - i) == Math.abs(y - j)){
+        for(int k = 0; k < depth; k++){
+            int i = chess[k] / N;
+            int j = chess[k] % N;
+            if(j == y || Math.abs(depth - i) == Math.abs(y - j)){
                 return false;
             }
         }
