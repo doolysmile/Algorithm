@@ -8,30 +8,27 @@ import java.util.ArrayList;
 public class B9663 {
     static int N;
     static int cnt;
-    static boolean[] visited;
+
     static ArrayList<Integer> chess;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         N = Integer.parseInt(br.readLine());
         cnt = 0;
-        visited = new boolean[N*N];
-        dfs(0, 0);
         chess = new ArrayList<Integer>();
+        dfs(0);
 
         System.out.print(cnt);
     }
-    static void dfs(int depth, int current){
+    static void dfs(int depth){
         if(depth == N){
             cnt++;
             return;
         }
-        for(int i = current; i < N * N; i++){
-            if(visited[i] == false && check(i)){
-                visited[i] = true;
+        for(int i = depth * N; i < N *(depth + 1); i++){
+            if(check(i)){
                 chess.add(i);
-                dfs(depth + 1, i);
+                dfs(depth + 1);
                 chess.remove((Object) i);
-                visited[i] = false;
             }
         }
     }
