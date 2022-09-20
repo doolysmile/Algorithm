@@ -30,7 +30,7 @@ public class B1174 {
             long temp = current%10;
             for(int i = 0 ; i < temp; i++){
                 cnt++;
-                long newNum = Long.parseLong(current + "" + i);
+                long newNum =current * 10 +  i;
                 if(cnt == N){
                     ans = newNum;
                     break Loop;
