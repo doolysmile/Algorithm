@@ -1,70 +1,75 @@
 package git.Algorithm.baekjoon;
+import java.io.DataInputStream;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.StringTokenizer;
 
-public class B15352 {
+public class B15352 extends Reader{
     // 부모노드, 병합된 갯수
-    static int[][] parent;
-    static int[] A;
-    public static void main(String[] args) throws IOException {
-        int ans = 0;
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
+    private int[] parent, left, right, A;
+
+    public static void main(String[] args) throws Exception {
+        initFI();
+        new B15352().solution();
+    }
+    public void solution() throws Exception {
+        long ans = 0;
         // K : 팬 클럽 수, N : 팬 수
-        int K = Integer.parseInt(st.nextToken());
-        int N = Integer.parseInt(st.nextToken());
+        nextInt();
+        int N = nextInt();
         // 팬의 팬 클럽
+        // 부모 값 -1로 초기화
+        // 왼쪽
+        // 오른쪽
         A = new int[N + 1];
-        parent = new int[N + 1][3];
+        parent = new int[N + 1];
+        left = new int[N + 1];
+        right = new int[N + 1];
         for(int i = 1; i <= N; i++){
-            parent[i][0] = -1;
-            parent[i][1] = i;
-            parent[i][2] = i;
+            parent[i] = -1;
         }
-        st = new StringTokenizer(br.readLine());
+
         for(int i = 1; i <= N; i++){
-            A[i] = Integer.parseInt(st.nextToken());
-            if(i > 1 && A[i - 1] == A[i]){
+            A[i] = nextInt();
+            if(A[i - 1] == A[i]){
                 union(i - 1, i);
             }
+            left[i] = i - 1;
+            right[i] = i + 1;
         }
+        left[1] = right[N] = -1;
         // 명령어 수
-        int Q = Integer.parseInt(br.readLine());
+        int Q = nextInt();
         // 명령어
-        int[][] command = new int[Q][2];
         for(int i = 0; i < Q; i++){
-            command[i] = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
-            if(command[i][0] == 2){
-                ans = ans + parent[findParent(command[i][1])][0] * (-1);
+            int a = nextInt();
+            int b = nextInt();
+            if(a == 2){
+                ans -= parent[findParent(b)];
             }
             else{
-                remove(command[i][1], N);
+//                System.out.println("command = " + command[1]);
+                remove(b, N);
             }
         }
-        for(int i = 1; i <= N; i++){
-            System.out.println("parent[i] = " + parent[i][0] + " " + parent[i][1] + " " + parent[i][2]);
-        }
+
         System.out.print(ans);
     }
-    static int findParent(int x){
-        if(parent[x][0] < 0){
+    int findParent(int x){
+        if(parent[x] < 0){
             return x;
         }
         else {
-            return findParent(parent[x][0]);
+            return findParent(parent[x]);
         }
     }
-    static void union(int ele1, int ele2){
+    void union(int ele1, int ele2){
         int ele1Parent = findParent(ele1);
         int ele2Parent = findParent(ele2);
-        parent[ele1Parent][0] += parent[ele2Parent][0];
-        parent[ele2][1] = ele1;
-        parent[ele1][2] = ele2;
-        parent[ele2Parent][0] = ele1Parent;
+        if(ele1Parent == ele2Parent){
+            return;
+        }
+        parent[ele1Parent] += parent[ele2Parent];
+
+        parent[ele2Parent] = ele1Parent;
     }
     // 연속 되 있는 거 삭제 할 경우
     // 삭제 시 양옆 연결될 경우
@@ -76,12 +81,62 @@ public class B15352 {
     /*
 
      */
-    static void remove(int x, int N){
-        int xParent = findParent(x);
-        parent[xParent][0]++;
+    void remove(int x, int N){
+        int leftX = left[x];
+        int rightX = right[x];
+//        System.out.println("parent[findParent(x)][0] = " + parent[findParent(x)][0]);
+        parent[findParent(x)]++;
+        if(leftX != -1 && rightX != -1 && A[leftX] == A[rightX]){
+            union(leftX, rightX);
+        }
+        if(leftX != -1){
+            right[leftX] = rightX;
+        }
+        if(rightX != -1){
+            left[rightX] = leftX;
+        }
+    }
+}
 
-        parent[x][0] = 0;
-        parent[x][1] = 0;
-        parent[x][2] = 0;
+class Reader
+{
+    private static final int DEFAULT_BUFFER_SIZE = 1 << 16;
+    private static DataInputStream inputStream;
+    private static byte[] buffer;
+    private static int curIdx, maxIdx;
+
+    protected static void initFI() {
+        inputStream = new DataInputStream(System.in);
+        buffer = new byte[DEFAULT_BUFFER_SIZE];
+        curIdx = maxIdx = 0;
+    }
+
+
+
+    public static int nextInt() throws Exception
+    {
+        int ret = 0;
+        byte c = read();
+        while (c <= ' ')
+            c = read();
+        boolean neg = (c == '-');
+        if (neg)
+            c = read();
+        do
+        {
+            ret = ret * 10 + c - '0';
+        } while ((c = read()) >= '0' && c <= '9');
+
+        if (neg)
+            return -ret;
+        return ret;
+    }
+
+    private static byte read() throws Exception {
+        if (curIdx == maxIdx) {
+            maxIdx = inputStream.read(buffer, curIdx = 0, DEFAULT_BUFFER_SIZE);
+            if (maxIdx == -1) buffer[0] = -1;
+        }
+        return buffer[curIdx++];
     }
 }
