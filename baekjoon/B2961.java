@@ -1,5 +1,3 @@
-package git.Algorithm.baekjoon;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,6 +9,7 @@ public class B2961 {
     static boolean[] visited;
     static int[][] taste;
     public static void main(String[] args) throws IOException {
+        // 입력을 받는 부분
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         N = Integer.parseInt(br.readLine());
         taste = new int[N][2];
@@ -22,18 +21,24 @@ public class B2961 {
         dfs(0 , 0, 1, 0);
         System.out.println(ans);
     }
-    static void dfs(int cnt, int current, int s, int b){
-        if(s - b == 0){
+    static void dfs(int depth, int current, int sour, int bitter){
+        // 성능을 위한 부분으로 만들었으나, 없는게 더 좋을 거 같음
+        if(sour - bitter == 0){
             ans = 0;
             return;
         }
-        if(cnt == N){
-            if(s != 1 && b != 0){
-                ans = Math.min(ans, Math.abs(s - b));
+        // depth가 끝에 왔을때
+        if(depth == N){
+            // 모든 재료를 안 쓰는 경우를 제외하기 위해서
+            if(sour != 1 && bitter != 0){
+                // 최솟값 계산
+                ans = Math.min(ans, Math.abs(sour - bitter));
             }
             return;
         }
-        dfs(cnt + 1,current + 1, s*taste[current][0], b + taste[current][1]);
-        dfs(cnt + 1, current+ 1, s, b);
+        // 해당 재료를 쓰는 경우
+        dfs(depth + 1,current + 1, sour * taste[current][0], bitter + taste[current][1]);
+        // 해당 재료를 안 쓰는 경우
+        dfs(depth + 1, current+ 1, sour, bitter);
     }
 }
