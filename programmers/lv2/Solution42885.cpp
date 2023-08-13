@@ -8,7 +8,7 @@ using namespace std;
 /*
 너무 자바 스럽게 푼거 같음
 vector 메서드 익히기
-*/
+*/ 
 
 int solution(vector<int> people, int limit) {
     int answer = people.size();
